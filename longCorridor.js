@@ -50,6 +50,48 @@ const stringSplitter = function (string) {
   }
   return result;
 };
+
+// Note: Core is caring about sets of 2 S's, and the spaces between them
+// Base cases: Uneven number of S => 0, SS => 1, 0 or 1 S => 0
+
+// cut out 2 for loops and saves about 1/4 of the memory used in the previous solution
+const numberOfWays2 = function (corridor) {
+  let result = 1;
+  let seatIndices = [];
+  for (let i = 0; i < corridor.length; i++) {
+    if (corridor[i] === "S") {
+      seatIndices.push(i);
+    }
+  }
+  if (seatIndices.length == 2) return 1;
+  if (seatIndices.length < 2 || seatIndices.length % 2 != 0) return 0;
+  for (let i = 1; i < seatIndices.length - 1; i += 2) {
+    result = (result * (seatIndices[i + 1] - seatIndices[i])) % (10 ** 9 + 7);
+  }
+  return result;
+};
+
+// One less loop, but runs slower on leetcode likely because of the multiplication before the case checks
+const numberOfWays3 = function (corridor) {
+  let result = 1;
+  let seatIndices = [];
+  for (let i = 0; i < corridor.length; i++) {
+    if (corridor[i] === "S") {
+      seatIndices.push(i);
+      if (seatIndices.length % 2 && seatIndices.length > 2) {
+        result =
+          (result *
+            (seatIndices[seatIndices.length - 1] -
+              seatIndices[seatIndices.length - 2])) %
+          (10 ** 9 + 7);
+      }
+    }
+  }
+  if (seatIndices.length == 2) return 1;
+  if (seatIndices.length < 2 || seatIndices.length % 2 != 0) return 0;
+  return result;
+};
+
 // console.log(numberOfWays("S") == 0);
 
 // console.log(numberOfWays("SSPPSPS") == 3);
@@ -69,34 +111,26 @@ const stringSplitter = function (string) {
 //   )
 // );
 
-// Note: Core is caring about sets of 2 S's, and the spaces between them
-// Base cases: Uneven number of S => 0, SS => 1, 0 or 1 S => 0
+// console.log(numberOfWays2("S") == 0);
 
-const numberOfWays2 = function (corridor) {
-  //   cut out 2 for loops and saves about 1/4 of the memory used in the previous solution
-  let result = 1;
-  let seatIndices = [];
-  for (let i = 0; i < corridor.length; i++) {
-    if (corridor[i] === "S") {
-      seatIndices.push(i);
-    }
-  }
-  if (seatIndices.length == 2) return 1;
-  if (seatIndices.length < 2 || seatIndices.length % 2 != 0) return 0;
-  for (let i = 1; i < seatIndices.length - 1; i += 2) {
-    result = (result * (seatIndices[i + 1] - seatIndices[i])) % (10 ** 9 + 7);
-  }
-  return result;
-};
+// console.log(numberOfWays2("SSPPSPS") == 3);
 
-console.log(numberOfWays2("S") == 0);
+// console.log(numberOfWays2("SPPSSSSPPS") == 1);
 
-console.log(numberOfWays2("SSPPSPS") == 3);
+// console.log(
+//   numberOfWays2(
+//     "PPPPPSPPSPPSPPPSPPPPSPPPPSPPPPSPPSPPPSPSPPPSPSPPPSPSPPPSPSPPPPSPPPPSPPPSPPSPPPPSPSPPPPSPSPPPPSPSPPPSPPSPPPPSPSPSS"
+//   ) == 919999993
+// );
 
-console.log(numberOfWays2("SPPSSSSPPS") == 1);
+console.log(numberOfWays3("S") == 0);
+
+console.log(numberOfWays3("SSPPSPS") == 3);
+
+console.log(numberOfWays3("SPPSSSSPPS") == 1);
 
 console.log(
-  numberOfWays2(
+  numberOfWays3(
     "PPPPPSPPSPPSPPPSPPPPSPPPPSPPPPSPPSPPPSPSPPPSPSPPPSPSPPPSPSPPPPSPPPPSPPPSPPSPPPPSPSPPPPSPSPPPPSPSPPPSPPSPPPPSPSPSS"
   ) == 919999993
 );
