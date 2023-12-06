@@ -100,3 +100,15 @@ var isValid = function (s) {
 };
 
 // https://leetcode.com/problems/simplify-path/
+var simplifyPath = function (path) {
+  let items = path.split("/");
+  let stack = [];
+  for (let item of items) {
+    if (item === "..") {
+      stack.pop();
+    } else if (item !== "" && item !== ".") {
+      stack.push(item);
+    }
+  }
+  return "/" + stack.join("/");
+};
