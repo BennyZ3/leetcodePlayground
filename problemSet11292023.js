@@ -79,6 +79,24 @@ var makeGood2 = function (s) {
 };
 
 // https://leetcode.com/problems/valid-parentheses/
-var isValid = function (s) {};
+var isValid = function (s) {
+  const brackets = {
+    ")": "(",
+    "]": "[",
+    "}": "{",
+  };
+  const stack = [];
+  for (const item of s) {
+    if (["(", "[", "{"].includes(item)) {
+      stack.push(item);
+    } else if (stack[stack.length - 1] === brackets[item]) {
+      // check if the last item in the stack is the opening bracket for the current item
+      stack.pop();
+    } else {
+      return false;
+    }
+  }
+  return stack.length ? false : true;
+};
 
 // https://leetcode.com/problems/simplify-path/
