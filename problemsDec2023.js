@@ -151,3 +151,92 @@ var largestGoodInteger = function (num) {
   }
   return result;
 };
+
+// https://leetcode.com/problems/minimum-time-visiting-all-points/?envType=daily-question&envId=2023-12-11
+var minTimeToVisitAllPoints = function (points) {
+  let result = 0;
+  for (let i = 0; i < points.length - 1; i++) {
+    result += Math.max(
+      Math.abs(points[i][0] - points[i + 1][0]),
+      Math.abs(points[i][1] - points[i + 1][1])
+    );
+  }
+  return result;
+};
+
+var checkXMatrix = function (grid) {
+  for (let i = 0; i < grid.length; i++) {
+    // Diagonals
+    if (grid[i][i] == 0 || grid[i][grid.length - 1 - i] == 0) {
+      return false;
+    }
+    for (let j = 0; j < grid[i].length; j++) {
+      if (j == i || j == grid.length - 1 - i) {
+        // Skip diagonals
+        continue;
+      } else if (grid[i][j] !== 0) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
+var checkXMatrix2 = function (grid) {
+  // Moving diagonal check into the nested loop slows it down by a decent amount
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[i].length; j++) {
+      if (j == i || j == grid.length - 1 - i) {
+        if (grid[i][j] == 0) {
+          return false;
+        } else {
+          continue;
+        }
+      } else if (grid[i][j] !== 0) {
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
+// https://leetcode.com/problems/difference-between-ones-and-zeros-in-row-and-column/?envType=daily-question&envId=2023-12-11
+var onesMinusZeros = function (grid) {
+  let result = [];
+  for (let i = 0; i < grid.length; i++) {
+    let row = [];
+    let rowTotal = grid[i].reduce(
+      (acc, curr) => acc + (curr === 1 ? 1 : -1),
+      0
+    );
+    for (let j = 0; j < grid[0].length; j++) {
+      let columnTotal = grid.reduce(
+        (acc, curr) => acc + (curr[j] === 1 ? 1 : -1),
+        0
+      );
+      row.push(columnTotal + rowTotal);
+    }
+    result.push(row);
+  }
+  for (const row of result) {
+    console.log(row);
+  }
+  //  Need to make it faster for leetcode test, failing on a test case with a large number of single item rows
+  return result;
+};
+
+console.log(
+  onesMinusZeros([
+    [0, 1, 1],
+    [1, 0, 1],
+    [0, 0, 1],
+  ])
+);
+console.log(
+  onesMinusZeros([
+    [1, 1, 1],
+    [1, 1, 1],
+  ])
+);
+// let test = Array(9).fill(Array(9).fill(0));
+// console.log(test[0][0]);
