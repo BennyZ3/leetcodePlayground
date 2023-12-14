@@ -218,25 +218,35 @@ var onesMinusZeros = function (grid) {
     }
     result.push(row);
   }
-  for (const row of result) {
-    console.log(row);
-  }
   //  Need to make it faster for leetcode test, failing on a test case with a large number of single item rows
   return result;
 };
 
-console.log(
-  onesMinusZeros([
-    [0, 1, 1],
-    [1, 0, 1],
-    [0, 0, 1],
-  ])
-);
-console.log(
-  onesMinusZeros([
-    [1, 1, 1],
-    [1, 1, 1],
-  ])
-);
-// let test = Array(9).fill(Array(9).fill(0));
-// console.log(test[0][0]);
+var onesMinusZeros2 = function (grid) {
+  // Faster and will do each row/column calculation only once, but still on the bottom 50% of submissions for time and space
+  let result = [];
+  let rows = [];
+  let columns = [];
+  for (let i = 0; i < grid.length; i++) {
+    let rowTotal = grid[i].reduce(
+      (acc, curr) => acc + (curr === 1 ? 1 : -1),
+      0
+    );
+    rows.push(rowTotal);
+  }
+  for (let j = 0; j < grid[0].length; j++) {
+    let columnTotal = grid.reduce(
+      (acc, curr) => acc + (curr[j] === 1 ? 1 : -1),
+      0
+    );
+    columns.push(columnTotal);
+  }
+  for (let i = 0; i < rows.length; i++) {
+    let row = [];
+    for (let j = 0; j < columns.length; j++) {
+      row.push(rows[i] + columns[j]);
+    }
+    result.push(row);
+  }
+  return result;
+};
