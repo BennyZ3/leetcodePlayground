@@ -250,3 +250,118 @@ var onesMinusZeros2 = function (grid) {
   }
   return result;
 };
+
+// https://leetcode.com/problems/find-words-that-can-be-formed-by-characters/?envType=daily-question&envId=2023-12-11
+var countCharacters = function (words, chars) {
+  // above avg memory, below avg speed
+  let characters = {};
+  for (const char of chars) {
+    characters[char] = characters[char] ? characters[char] + 1 : 1;
+  }
+  let result = 0;
+  for (const word of words) {
+    let wordChars = { ...characters };
+    let flag = true;
+    for (const char of word) {
+      if (wordChars[char]) {
+        wordChars[char]--;
+      } else {
+        flag = false;
+        break;
+      }
+    }
+    if (flag) {
+      result += word.length;
+    }
+  }
+  return result;
+};
+
+// https://leetcode.com/problems/destination-city/?envType=daily-question&envId=2023-12-11
+var destCity = function (paths) {
+  let cities = {};
+  for (const path of paths) {
+    cities[path[0]] = cities[path[0]] ? cities[path[0]] + 1 : 1;
+    cities[path[1]] = cities[path[1]] ? cities[path[1]] + 1 : 1;
+  }
+  for (const city of Object.keys(cities)) {
+    if (cities[city] == 1) {
+      for (let path of paths) {
+        if (path[1] == city) {
+          return city;
+        }
+      }
+    }
+  }
+};
+var destCity2 = function (paths) {
+  let cities = {};
+  for (const path of paths) {
+    cities[path[0]] = path[1];
+  }
+  let currentLocation = paths[0][0];
+  while (cities[currentLocation]) {
+    currentLocation = cities[currentLocation];
+  }
+  return currentLocation;
+};
+
+// https://leetcode.com/problems/valid-anagram/?envType=daily-question&envId=2023-12-11
+var isAnagram = function (s, t) {
+  if (s.length !== t.length) {
+    return false;
+  }
+  let chars = {};
+  for (const char of s) {
+    chars[char] = chars[char] ? chars[char] + 1 : 1;
+  }
+  for (const char of t) {
+    if (!chars[char]) {
+      return false;
+    }
+    chars[char]--;
+  }
+  return true;
+};
+
+// https://leetcode.com/problems/design-a-food-rating-system/?envType=daily-question&envId=2023-12-17
+// TODO: Make this faster
+var FoodRatings = function (foods, cuisines, ratings) {
+  this.foods = {};
+  this.cuisines = {};
+  for (let i = 0; i < foods.length; i++) {
+    this.foods[foods[i]] = {
+      cuisine: cuisines[i],
+      rating: ratings[i],
+    };
+    this.cuisines[cuisines[i]]
+      ? this.cuisines[cuisines[i]].push(foods[i])
+      : (this.cuisines[cuisines[i]] = [foods[i]]);
+  }
+};
+FoodRatings.prototype.changeRating = function (food, rating) {
+  this.foods[food].rating = rating;
+};
+FoodRatings.prototype.highestRated = function (cuisine) {
+  let highestRated = 0;
+  let highestRatedFood = null;
+  for (const food of this.cuisines[cuisine]) {
+    if (this.foods[food].rating > highestRated) {
+      highestRated = this.foods[food].rating;
+      highestRatedFood = food;
+    } else if (this.foods[food].rating == highestRated) {
+      highestRatedFood = highestRatedFood < food ? highestRatedFood : food;
+    }
+  }
+  return highestRatedFood;
+};
+
+const test = new FoodRatings(
+  ["kimchi", "miso", "sushi", "moussaka", "ramen", "bulgogi"],
+  ["korean", "japanese", "japanese", "greek", "japanese", "korean"],
+  [9, 12, 8, 15, 14, 7]
+);
+console.log(test.foods.miso);
+test.changeRating("miso", 13);
+console.log(test.foods.miso);
+console.log(test.highestRated("korean"));
