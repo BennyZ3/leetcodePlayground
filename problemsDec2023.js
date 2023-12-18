@@ -356,12 +356,41 @@ FoodRatings.prototype.highestRated = function (cuisine) {
   return highestRatedFood;
 };
 
-const test = new FoodRatings(
-  ["kimchi", "miso", "sushi", "moussaka", "ramen", "bulgogi"],
-  ["korean", "japanese", "japanese", "greek", "japanese", "korean"],
-  [9, 12, 8, 15, 14, 7]
-);
-console.log(test.foods.miso);
-test.changeRating("miso", 13);
-console.log(test.foods.miso);
-console.log(test.highestRated("korean"));
+// const test = new FoodRatings(
+//   ["kimchi", "miso", "sushi", "moussaka", "ramen", "bulgogi"],
+//   ["korean", "japanese", "japanese", "greek", "japanese", "korean"],
+//   [9, 12, 8, 15, 14, 7]
+// );
+// console.log(test.foods.miso);
+// test.changeRating("miso", 13);
+// console.log(test.foods.miso);
+// console.log(test.highestRated("korean"));
+
+// https://leetcode.com/problems/maximum-product-difference-between-two-pairs/submissions/?envType=daily-question&envId=2023-12-17
+var maxProductDifference = function (nums) {
+  nums.sort((a, b) => a - b);
+  return nums[nums.length - 1] * nums[nums.length - 2] - nums[0] * nums[1];
+};
+
+var macProductDifference2 = function (nums) {
+  // A bit faster by avoiding a sort
+  let max = 0;
+  let secondMax = 0;
+  let min = Infinity;
+  let secondMin = Infinity;
+  for (const num of nums) {
+    if (num > max) {
+      secondMax = max;
+      max = num;
+    } else if (num > secondMax) {
+      secondMax = num;
+    }
+    if (num < min) {
+      secondMin = min;
+      min = num;
+    } else if (num < secondMin) {
+      secondMin = num;
+    }
+  }
+  return max * secondMax - min * secondMin;
+};
