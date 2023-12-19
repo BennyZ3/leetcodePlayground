@@ -394,3 +394,60 @@ var macProductDifference2 = function (nums) {
   }
   return max * secondMax - min * secondMin;
 };
+
+// for (let i of "hello") {
+//   console.log(i);
+// }
+
+// https://leetcode.com/problems/number-of-1-bits/?envType=daily-question&envId=2023-12-11
+var hammingWeight = function (n) {
+  let count = 0;
+  while (n > 0) {
+    if (n % 2) {
+      count++;
+    }
+    n = Math.floor(n / 2);
+  }
+  return count;
+};
+
+// console.log(hammingWeight());
+
+// https://leetcode.com/problems/image-smoother/?envType=daily-question&envId=2023-12-11
+var imageSmoother = function (img) {
+  let result = [];
+  for (let i = 0; i < img.length; i++) {
+    result.push([]);
+    for (let j = 0; j < img[i].length; j++) {
+      let sum = 0;
+      let count = 0;
+      console.log(i, j);
+      for (
+        let k = i - 1 > 0 ? i - 1 : 0;
+        k < (i + 2 < img.length ? i + 2 : img.length);
+        k++
+      ) {
+        for (
+          let l = j - 1 > 0 ? j - 1 : 0;
+          l < (j + 2 < img[i].length ? j + 2 : img[i].length);
+          l++
+        ) {
+          sum += img[k][l];
+          count++;
+        }
+      }
+      result[i][j] = Math.floor(sum / count);
+    }
+  }
+  return result;
+};
+let matrix = imageSmoother([
+  [2, 3, 4],
+  [5, 6, 7],
+  [8, 9, 10],
+  [11, 12, 13],
+  [14, 15, 16],
+]);
+for (const row of matrix) {
+  console.log(row);
+}
