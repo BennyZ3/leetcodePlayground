@@ -441,13 +441,65 @@ var imageSmoother = function (img) {
   }
   return result;
 };
-let matrix = imageSmoother([
-  [2, 3, 4],
-  [5, 6, 7],
-  [8, 9, 10],
-  [11, 12, 13],
-  [14, 15, 16],
-]);
-for (const row of matrix) {
-  console.log(row);
-}
+// let matrix = imageSmoother([
+//   [2, 3, 4],
+//   [5, 6, 7],
+//   [8, 9, 10],
+//   [11, 12, 13],
+//   [14, 15, 16],
+// ]);
+// for (const row of matrix) {
+//   console.log(row);
+// }
+
+// https://leetcode.com/problems/knight-dialer/?envType=daily-question&envId=2023-12-11
+let pattern = {
+  0: [4, 6],
+  1: [6, 8],
+  2: [7, 9],
+  3: [4, 8],
+  4: [0, 3, 9],
+  5: [],
+  6: [0, 1, 7],
+  7: [2, 6],
+  8: [1, 3],
+  9: [2, 4],
+};
+// TODO: needs to be faster
+var knightDialer = function (n) {
+  if (n === 1) {
+    // includes the case of starting on 5
+    return 10;
+  }
+  let result = 0;
+  for (let number of [0, 1, 2, 3, 4, 6, 7, 8, 9]) {
+    result += countPaths(n, number);
+  }
+  return result;
+};
+
+var countPaths = function (n, number) {
+  if (n === 1) {
+    return 1;
+  }
+  let result = 0;
+  for (let nextNumber of pattern[number]) {
+    result += countPaths(n - 1, nextNumber);
+  }
+  return result;
+};
+
+// https://leetcode.com/problems/buy-two-chocolates/submissions/?envType=daily-question&envId=2023-12-11
+var buyChoco = function (prices, money) {
+  let min = prices[0];
+  let secondMin = 101;
+  for (let i = 1; i < prices.length; i++) {
+    if (prices[i] < min) {
+      secondMin = min;
+      min = prices[i];
+    } else if (prices[i] < secondMin) {
+      secondMin = prices[i];
+    }
+  }
+  return min + secondMin <= money ? money - (min + secondMin) : money;
+};
