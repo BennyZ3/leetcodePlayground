@@ -503,3 +503,30 @@ var buyChoco = function (prices, money) {
   }
   return min + secondMin <= money ? money - (min + secondMin) : money;
 };
+
+// https://leetcode.com/problems/shift-2d-grid/submissions/
+var shiftGrid = function (grid, k) {
+  let lenX = grid.length;
+  let lenY = grid[0].length;
+  grid = grid.flat();
+  k = k % grid.length;
+  grid = [...grid.splice(-k), ...grid];
+  let result = [];
+  for (let i = 0; i < lenX; i++) {
+    result.push(grid.slice(i * lenY, (i + 1) * lenY));
+  }
+  return result;
+};
+
+var shiftGrid2 = function (grid, k) {
+  let lenX = grid.length;
+  let lenY = grid[0].length;
+  grid = grid.flat();
+  k = k % grid.length;
+  grid = [...grid.splice(-k), ...grid];
+  for (let i = 0; i < lenX; i++) {
+    let temp = grid.splice(i, lenY);
+    grid.splice(i, 0, temp);
+  }
+  return grid;
+};
