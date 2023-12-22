@@ -608,4 +608,27 @@ var maxScore2 = function (s) {
   return maxScore;
 };
 
-console.log(maxScore2("0000"));
+// https://leetcode.com/problems/number-of-senior-citizens/submissions/
+var countSeniors = function (details) {
+  return details.reduce((a, b) => (b[11] + b[12] > 60 ? a + 1 : a), 0);
+};
+
+// https://leetcode.com/problems/check-if-a-string-can-break-another-string/submissions/
+var checkIfCanBreak = function (s1, s2) {
+  let allLarger = true;
+  let allSmaller = true;
+  s1 = s1.split("").sort();
+  s2 = s2.split("").sort();
+  for (let i = 0; i < s1.length; i++) {
+    if (s1[i] < s2[i]) {
+      allLarger = false;
+    }
+    if (s1[i] > s2[i]) {
+      allSmaller = false;
+    }
+    if (!allSmaller && !allLarger) {
+      return false;
+    }
+  }
+  return true;
+};
