@@ -530,3 +530,82 @@ var shiftGrid2 = function (grid, k) {
   }
   return grid;
 };
+
+// https://leetcode.com/problems/widest-vertical-area-between-two-points-containing-no-points/?envType=daily-question&envId=2023-12-21
+var maxWidthOfVerticalArea = function (points) {
+  points.sort((a, b) => a[0] - b[0]);
+  let max = 0;
+  for (let i = 1; i < points.length; i++) {
+    max = Math.max(max, points[i][0] - points[i - 1][0]);
+  }
+  return max;
+};
+
+// https://leetcode.com/problems/maximum-score-after-splitting-a-string/?envType=daily-question&envId=2023-12-21
+var maxScore = function (s) {
+  let maxScore = 0;
+  for (let i = 1; i < s.length; i++) {
+    if (s[i - 1] === "0" && s[i] === "1") {
+      let left = s.slice(0, i);
+      let right = s.slice(i);
+      let score = 0;
+      for (const char of left) {
+        if (char === "0") {
+          score++;
+        }
+      }
+      for (const char of right) {
+        if (char === "1") {
+          score++;
+        }
+      }
+      if (score > maxScore) {
+        maxScore = score;
+      }
+    } else if (i == 1 || i == s.length - 1) {
+      let left = s.slice(0, i);
+      let right = s.slice(i);
+      let score = 0;
+      for (const char of left) {
+        if (char === "0") {
+          score++;
+        }
+      }
+      for (const char of right) {
+        if (char === "1") {
+          score++;
+        }
+      }
+      if (score > maxScore) {
+        maxScore = score;
+      }
+    }
+  }
+  return maxScore;
+};
+
+var maxScore2 = function (s) {
+  let maxScore = 0;
+  let left = 0;
+  let right = 0;
+  for (let i = 0; i < s.length; i++) {
+    // count # of initial ones
+    if (s[i] === "1") {
+      right++;
+    }
+  }
+  for (let i = 1; i < s.length; i++) {
+    // traverse string again adjusting the counts of ones and zeros at given position
+    if (s[i - 1] === "0") {
+      left++;
+    } else {
+      right--;
+    }
+    if (left + right > maxScore) {
+      maxScore = left + right;
+    }
+  }
+  return maxScore;
+};
+
+console.log(maxScore2("0000"));
