@@ -632,3 +632,43 @@ var checkIfCanBreak = function (s1, s2) {
   }
   return true;
 };
+
+// https://leetcode.com/problems/minimum-difficulty-of-a-job-schedule/?envType=daily-question&envId=2023-12-24
+var minDifficulty = function (jobDifficulty, d) {
+  if (jobDifficulty.length < d) {
+    return -1;
+  }
+  jobDifficulty.sort((a, b) => b - a);
+  return (
+    jobDifficulty
+      .slice(jobDifficulty.length - d, jobDifficulty.length - 1)
+      .reduce((a, b) => a + b) + jobDifficulty[0]
+  );
+};
+
+console.log(minDifficulty([11, 111, 22, 222, 33, 333, 44, 444], 6));
+
+// https://leetcode.com/problems/minimum-time-to-make-rope-colorful/?envType=daily-question&envId=2023-12-24
+var minCost = function (colors, neededTime) {
+  let cost = 0;
+  let colorCount = [];
+  for (let i = 0; i < colors.length; i++) {
+    if (colors[i] === colors[i + 1]) {
+      colorCount.push(neededTime[i]);
+      i++;
+    } else {
+    }
+  }
+};
+
+const returnMinRemovalTime = (arr) => {
+  let removalTime = 0;
+  let min = Infinity;
+  for (const num of arr) {
+    if (num < min) {
+      min = num;
+    }
+    removalTime += num;
+  }
+  return removalTime - min;
+};
