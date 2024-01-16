@@ -297,3 +297,49 @@ var minSteps = function (s, t) {
   }
   return steps;
 };
+
+// https://leetcode.com/problems/determine-if-two-strings-are-close/description/
+var closeStrings = function (word1, word2) {
+  if (word1.length != word2.length) return false;
+  let letters1 = {};
+  let letters2 = {};
+  for (const letter of word1) {
+    letters1[letter] = letters1[letter] ? letters1[letter] + 1 : 1;
+  }
+  for (const letter of word2) {
+    letters2[letter] = letters2[letter] ? letters2[letter] + 1 : 1;
+  }
+  let keys1 = Object.keys(letters1).sort();
+  let keys2 = Object.keys(letters2).sort();
+  if (keys1.length != keys2.length) return false;
+  if (keys1.join() != keys2.join()) {
+    return false;
+  }
+  let values1 = Object.values(letters1).sort();
+  let values2 = Object.values(letters2).sort();
+  if (values1.join() != values2.join()) {
+    return false;
+  }
+  return true;
+};
+
+var closeStrings2 = function (word1, word2) {
+  if (word1.length != word2.length) return false;
+  let letters1 = {};
+  let letters2 = {};
+  for (const letter of word1) {
+    letters1[letter] = letters1[letter] ? letters1[letter] + 1 : 1;
+  }
+  for (const letter of word2) {
+    letters2[letter] = letters2[letter] ? letters2[letter] + 1 : 1;
+  }
+  if (
+    Object.keys(letters1).sort().join() != Object.keys(letters2).sort().join()
+  ) {
+    return false;
+  }
+  return (
+    Object.values(letters1).sort().join() ==
+    Object.values(letters2).sort().join()
+  );
+};
