@@ -343,3 +343,69 @@ var closeStrings2 = function (word1, word2) {
     Object.values(letters2).sort().join()
   );
 };
+
+// https://leetcode.com/problems/unique-number-of-occurrences/description/?envType=daily-question&envId=2024-01-17
+var uniqueOccurrences = function (arr) {
+  let numbers = {};
+  for (const num of arr) {
+    numbers[num] = numbers[num] ? numbers[num] + 1 : 1;
+  }
+  let occurrences = Object.values(numbers);
+  let unique = new Set(occurrences);
+  return occurrences.length == unique.size();
+};
+
+// https://leetcode.com/problems/find-players-with-zero-or-one-losses/?envType=daily-question&envId=2024-01-17
+var findWinners = function (matches) {
+  let players = {};
+  for (const match of matches) {
+    if (!players[match[0]]) {
+      players[match[0]] = 0;
+    }
+    if (!players[match[1]]) {
+      players[match[1]] = 1;
+    } else {
+      players[match[1]]++;
+    }
+  }
+  let result = [[], []];
+  for (const [player, losses] of Object.entries(players)) {
+    if (losses == 0) {
+      result[0].push(player);
+    } else if (losses == 1) {
+      result[1].push(player);
+    }
+  }
+  return result;
+};
+
+// https://leetcode.com/problems/climbing-stairs/?envType=daily-question&envId=2024-01-18
+var climbStairs = function (n) {
+  let first = 1;
+  let second = 1;
+  let current = 1;
+  for (let i = 2; i <= n; i++) {
+    current = first + second;
+    first = second;
+    second = current;
+  }
+  return current;
+};
+
+// https://leetcode.com/problems/set-mismatch/?envType=daily-question&envId=2024-01-21
+var findErrorNums = function (nums) {
+  let result = [0, 0];
+  let numObj = {};
+  for (let i = 0; i < nums.length; i++) {
+    numObj[nums[i]] = numObj[nums[i]] ? numObj[nums[i]] + 1 : 1;
+    if (numObj[nums[i]] == 2) {
+      result[0] = nums[i];
+    }
+  }
+  for (let i = 1; i <= nums.length; i++) {
+    if (!numObj[i]) {
+      result[1] = i;
+      return result;
+    }
+  }
+};
