@@ -409,3 +409,91 @@ var findErrorNums = function (nums) {
     }
   }
 };
+
+/**
+ * @param {string[]} arr
+ * @return {number}
+ */
+var maxLength = function (arr) {
+  arr.sort((a, b) => (a.length < b.length ? 1 : -1));
+  let maxLen = arr[0].length;
+  for (let i = 0; i < arr.length; i++) {
+    let chars = {};
+    let noDupes = true;
+    for (let char of arr[i]) {
+      if (chars[char]) {
+        noDupes = false;
+        continue;
+      }
+      chars[char] = 1;
+    }
+    if (noDupes) {
+      for (let j = i + 1; j < arr.length; j++) {
+        if (arr[i].length + arr[j].length > 26) {
+          continue;
+        } else {
+          let flag = true;
+          for (let char2 of arr[j]) {
+            if (chars[char2]) {
+              flag = false;
+            }
+          }
+          let len = arr[i].length + arr[j].length;
+          if (flag && len > maxLen) {
+            maxLen = len;
+          }
+        }
+      }
+    }
+  }
+  return maxLen;
+};
+
+// https://leetcode.com/problems/evaluate-reverse-polish-notation/?envType=daily-question&envId=2024-01-24
+var evalRPN = function (tokens) {
+  let stack = [];
+  tokens = tokens.map((i) => {
+    return Number(i) ? Number(i) : i;
+  });
+  for (let token of tokens) {
+    if (Number(token) || token == "0") {
+      stack.push(Number(token));
+    } else {
+      let a = stack.pop();
+      let b = stack.pop();
+      if (token == "+") {
+        stack.push(a + b);
+      } else if (token == "-") {
+        stack.push(b - a);
+      } else if (token == "*") {
+        stack.push(a * b);
+      } else if (token == "/") {
+        if (b / a < 0) {
+          stack.push(Math.ceil(b / a));
+        } else {
+          stack.push(Math.floor(b / a));
+        }
+      }
+    }
+  }
+  return stack[0];
+};
+
+// https://leetcode.com/problems/next-greater-element-i/submissions/1162161005/
+var nextGreaterElement = function (nums1, nums2) {
+  let result = [];
+  for (let num of nums1) {
+    let i = nums2.indexOf(num);
+    let flag = true;
+    while (flag && i < nums2.length) {
+      if (nums2[i] > num) {
+        result.push(nums2[i]);
+        flag = false;
+      } else if (i == nums2.length - 1) {
+        result.push(-1);
+      }
+      i++;
+    }
+  }
+  return result;
+};
