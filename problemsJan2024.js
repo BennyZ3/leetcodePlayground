@@ -497,3 +497,151 @@ var nextGreaterElement = function (nums1, nums2) {
   }
   return result;
 };
+
+// https://leetcode.com/problems/daily-temperatures/?envType=daily-question&envId=2024-01-24
+var dailyTemperatures = function (temperatures) {
+  let result = [];
+  let indexGreaterThan = {};
+  for (let i = 0; i < temperatures.length; i++) {
+    let flag = true;
+    let j = i + 1;
+    if (i == temperatures.length - 1) {
+      result.push(0);
+    } else if (
+      indexGreaterThan[temperatures[i]] &&
+      indexGreaterThan[temperatures[i]] > j
+    ) {
+      result.push(indexGreaterThan[temperatures[i]] - i);
+      flag = false;
+    }
+    while (flag && j < temperatures.length) {
+      if (temperatures[i] < temperatures[j]) {
+        result.push(j - i);
+        indexGreaterThan[temperatures[i]] = j;
+        flag = false;
+      } else if (j == temperatures.length - 1) {
+        result.push(0);
+      }
+      j++;
+    }
+  }
+  return result;
+};
+
+// https://leetcode.com/problems/divide-array-into-arrays-with-max-difference/?envType=daily-question&envId=2024-02-01
+var divideArray = function (nums, k) {
+  if (nums.length % 3 != 0) {
+    return [];
+  }
+  nums.sort((a, b) => a - b);
+  let result = [];
+  for (let i = 0; i < nums.length; i += 3) {
+    if (nums[i + 2] - nums[i] > k) {
+      return [];
+    } else {
+      result.push(nums.slice(i, i + 3));
+    }
+  }
+  return result;
+};
+
+// https://leetcode.com/problems/russian-doll-envelopes/?source=submission-noac
+// var maxEnvelopes = function (envelopes) {
+//   // sort by width
+//   envelopes.sort((a, b) => {
+//     if (a[0] == b[0]) {
+//       return a[1] - b[1];
+//     } else {
+//       return a[0] - b[0];
+//     }
+//   });
+//   let maxEnvelopes = 0;
+//   currentEnv = [0, 0];
+//   for (let envelope of envelopes) {
+//     if (currentEnv[0] < envelope[0] && currentEnv[1] < envelope[1]) {
+//       maxEnvelopes++;
+//       currentEnv = envelope;
+//     }
+//     // Somehow account for instance where skipping is better
+//   }
+//   return maxEnvelopes;
+// };
+var maxEnvelopes = function (envelopes) {
+  // Needs to be optimized for large inputs (O(n^2) is too slow)
+  // Currently passes 85/87 test cases
+  envelopes.sort((a, b) => a[0] - b[0]);
+  let result = 0;
+  // count of envelopes that can fit inside the current envelope
+  let nestCount = new Array(envelopes.length).fill(1);
+  for (let i = 0; i < envelopes.length; i++) {
+    for (let j = 0; j < i; j++) {
+      if (
+        envelopes[i][0] > envelopes[j][0] &&
+        envelopes[i][1] > envelopes[j][1]
+      ) {
+        nestCount[i] = Math.max(nestCount[i], nestCount[j] + 1);
+      }
+    }
+    result = Math.max(result, nestCount[i]);
+  }
+  return result;
+};
+
+// console.log(
+//   maxEnvelopes([
+//     [5, 4],
+//     [6, 4],
+//     [6, 7],
+//     [2, 3],
+//   ])
+// );
+
+// console.log(
+//   maxEnvelopes([
+//     [2, 100],
+//     [3, 200],
+//     [4, 300],
+//     [5, 500],
+//     [5, 400],
+//     [5, 250],
+//     [6, 370],
+//     [6, 360],
+//     [7, 380],
+//   ])
+// );
+
+// https://leetcode.com/problems/sequential-digits/?envType=daily-question&envId=2024-02-02
+var sequentialDigits = function (low, high) {
+  let lowLen = low.toString().length;
+  let highLen = high.toString().length;
+  let sequences = [];
+  for (let len = lowLen; len <= highLen; len++) {
+    // number of digits
+    for (let i = 1; i <= 10 - lowLen; i++) {
+      // starting number
+      let num = [];
+      for (let k = i; k < Math.min(i + len, 10) && 10 - i >= len; k++) {
+        // how far to go from starting number
+        num.push(k);
+      }
+      num = Number(num.join(""));
+      if (num <= high && num >= low) {
+        sequences.push(num);
+      }
+      if (num > high) {
+        break;
+      }
+    }
+  }
+  return sequences;
+};
+
+var sequentialDigits = function (low, high) {
+  let sequences = [
+    12, 23, 34, 45, 56, 67, 78, 89, 123, 234, 345, 456, 567, 678, 789, 1234,
+    2345, 3456, 4567, 5678, 6789, 12345, 23456, 34567, 45678, 56789, 123456,
+    234567, 345678, 456789, 1234567, 2345678, 3456789, 12345678, 23456789,
+    123456789,
+  ];
+  return sequences.filter((a) => a >= low && a <= high);
+};
