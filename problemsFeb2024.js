@@ -103,3 +103,46 @@ var firstUniqChar = function (s) {
   }
   return -1;
 };
+
+// https://leetcode.com/problems/largest-divisible-subset/?envType=daily-question&envId=2024-02-05
+var largestDivisibleSubset = function (nums) {
+  if (nums.length == 1) {
+    return nums;
+  }
+  let result = [];
+  nums.sort((a, b) => a - b);
+  for (let i = nums.length - 1; i > 0; i--) {
+    let temp = [nums[i]];
+    let temp2 = [nums[i]];
+    let filter = nums.filter((a) => a <= nums[i] / 2).reverse();
+    for (let num of filter) {
+      let flag = true;
+      temp.forEach((int) => {
+        if (int % num != 0) {
+          flag = false;
+        }
+      });
+      if (flag) {
+        temp.push(num);
+      }
+    }
+    if (temp.length > result.length) {
+      result = temp;
+    }
+    for (let num of filter.reverse()) {
+      let flag = true;
+      temp2.forEach((int) => {
+        if (!(num % int == 0 || int % num == 0)) {
+          flag = false;
+        }
+      });
+      if (flag) {
+        temp2.push(num);
+      }
+    }
+    if (temp2.length > result.length) {
+      result = temp2;
+    }
+  }
+  return result;
+};
