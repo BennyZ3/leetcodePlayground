@@ -146,3 +146,92 @@ var largestDivisibleSubset = function (nums) {
   }
   return result;
 };
+
+// https://leetcode.com/problems/majority-element/submissions/1173240180/?envType=daily-question&envId=2024-02-05
+var majorityElement = function (nums) {
+  let elements = {};
+  let breakpoint = nums.length / 2;
+  for (let num of nums) {
+    elements[num] = elements[num] ? elements[num] + 1 : 1;
+    if (elements[num] >= breakpoint) {
+      return num;
+    }
+  }
+};
+
+var majorityElement = function (nums) {
+  nums.sort();
+  return nums[Math.floor(nums.length / 2)];
+};
+
+// https://leetcode.com/problems/majority-element-ii/submissions/1173267488/
+var majorityElement = function (nums) {
+  let breakpoint = nums.length / 3;
+  let element = {};
+  let result = [];
+  for (let num of nums) {
+    element[num] = element[num] ? element[num] + 1 : 1;
+  }
+  for (let [key, value] of Object.entries(element)) {
+    if (value > breakpoint) {
+      result.push(key);
+    }
+  }
+  return result;
+};
+
+// https://leetcode.com/problems/palindromic-substrings/submissions/1173345938/?envType=daily-question&envId=2024-02-05
+var countSubstrings = function (s) {
+  let result = s.length;
+  for (let i = 0; i < s.length - 1; i++) {
+    for (let j = i + 1; j < s.length; j++) {
+      if (s[i] == s[j]) {
+        let base = s.slice(i, j + 1);
+        if (base.split("").reverse().join("") == base) {
+          result++;
+        }
+      }
+    }
+  }
+  return result;
+};
+
+// https://leetcode.com/problems/find-first-palindromic-string-in-the-array/?envType=daily-question&envId=2024-02-13
+var firstPalindrome = function (words) {
+  for (let word of words) {
+    if (word[0] == word[word.length - 1]) {
+      if (word.split("").reverse().join("") == word) {
+        return word;
+      }
+    }
+  }
+  return "";
+};
+
+// ~30% faster and ~5% lower memory
+var firstPalindrome = function (words) {
+  for (let word of words) {
+    for (let i = 0; i <= word.length / 2; i++) {
+      if (word[i] == word[word.length - i - 1]) {
+        if (i == Math.floor(word.length / 2)) {
+          return word;
+        }
+      } else {
+        break;
+      }
+    }
+  }
+  return "";
+};
+
+// https://leetcode.com/problems/first-letter-to-appear-twice/
+var repeatedCharacter = function (s) {
+  let letters = {};
+  for (let letter of s) {
+    if (letters[letter]) {
+      return letter;
+    } else {
+      letters[letter] = 1;
+    }
+  }
+};
