@@ -410,6 +410,7 @@ var maxSlidingWindow = function (nums, k) {
 
 // https://leetcode.com/problems/integer-to-english-words/
 var numberToWords = function (num) {
+  // Objects for all the unique words
   let digits = [
     "Zero",
     "One",
@@ -449,6 +450,7 @@ var numberToWords = function (num) {
   if (num.length == 1) return digits[num[0]];
   let temp = [];
   while (num.length > 0) {
+    // group numbers into 3s
     temp.unshift(num.splice(-3, 3).join(""));
   }
   let result = "";
@@ -459,10 +461,13 @@ var numberToWords = function (num) {
     if (temp[i].length == 3 && temp[i] > 99) {
       result += digits[temp[i][0]] + " Hundred ";
     }
+    // using slice -2 to get the last 2 digits in account for cases of only 1-2 digits
     if (temp[i].slice(-2) < 20 && temp[i].slice(-2) > 0) {
+      // if the last 2 digits are less than 20, use the digits object
       result += digits[Number(temp[i].slice(-2))] + " ";
     } else if (temp[i].slice(-2) > 19) {
       if (temp[i].slice(-1) == 0) {
+        // if the last digit is 0, use just the tens object
         result += tens[temp[i].slice(-2)[0]] + " ";
       } else {
         result +=
@@ -470,8 +475,10 @@ var numberToWords = function (num) {
       }
     }
     if (i < temp.length - 1) {
+      // add the necessary suffix
       result += thousands[temp.length - i - 1] + " ";
     }
   }
+  // remove trailing space
   return result.trim();
 };
