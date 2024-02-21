@@ -779,3 +779,189 @@ var rangeBitwiseAnd = function (left, right) {
   }
   return parseInt(combo, 2);
 };
+
+// https://leetcode.com/problems/missing-number/?envType=daily-question&envId=2024-02-20
+var missingNumber = function (nums) {
+  nums.sort((a, b) => a - b);
+  if (nums[nums.length - 1] == nums.length - 1) {
+    return nums.length;
+  }
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] != i) {
+      return i;
+    }
+  }
+};
+
+// https://leetcode.com/problems/first-missing-positive/
+var firstMissingPositive = function (nums) {
+  nums = [...new Set(nums)];
+  nums = nums.filter((a) => a > 0);
+  nums.sort((a, b) => a - b);
+  if (nums[nums.length - 1] == nums.length) {
+    return nums.length + 1;
+  }
+  for (let i = 1; i < nums.length + 1; i++) {
+    if (nums[i - 1] != i) {
+      return i;
+    }
+  }
+  return 1;
+};
+
+// https://leetcode.com/problems/couples-holding-hands/
+var minSwapsCouples = function (row) {
+  let operations = 0;
+  for (let i = 0; i < row.length - 1; i++) {
+    if (row[i] % 2) {
+      if (row[i + 1] == row[i] - 1) {
+        i++;
+      } else {
+        let temp = row[i + 1];
+        let pairI = row.findIndex((a) => a == row[i] - 1);
+        row[i + 1] = row[pairI];
+        row[pairI] = temp;
+        operations++;
+        i++;
+      }
+    } else {
+      if (row[i + 1] == row[i] + 1) {
+        i++;
+      } else {
+        let temp = row[i + 1];
+        let pairI = row.findIndex((a) => a == row[i] + 1);
+        row[i + 1] = row[pairI];
+        row[pairI] = temp;
+        operations++;
+        i++;
+      }
+    }
+  }
+  return operations;
+};
+
+// https://leetcode.com/problems/unique-email-addresses/
+var numUniqueEmails = function (emails) {
+  let valid = 0;
+  let emailList = {};
+  for (let email of emails) {
+    email = email.split("@");
+    if (email[1].slice(-4) == ".com") {
+      email[0] = email[0].split("+")[0];
+      email[0] = email[0].replaceAll(".", "");
+      email = email.join("@");
+      if (emailList[email]) {
+        continue;
+      } else {
+        emailList[email] = 1;
+        valid++;
+      }
+    }
+  }
+  return valid;
+};
+
+// https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/
+var maximumSubarraySum = function (nums, k) {
+  let max = 0;
+  let currentNums = { currentValue: 0, repeats: [] };
+  let slice = nums.slice(0, k);
+  for (let num of slice) {
+    currentNums.currentValue += num;
+    if (currentNums[num]) {
+      currentNums[num]++;
+      // track repeats
+      currentNums.repeats.push(true);
+    } else {
+      currentNums[num] = 1;
+    }
+  }
+  if (currentNums.repeats.length == 0) {
+    max = currentNums.currentValue;
+  }
+  for (let i = 0; i < nums.length - k; i++) {
+    if (currentNums[nums[i]] > 1) {
+      // adjust repeat tracker if needed
+      currentNums.repeats.pop();
+      currentNums[nums[i]]--;
+    } else {
+      currentNums[nums[i]]--;
+    }
+    // account for new number coming in
+    if (currentNums[nums[i + k]]) {
+      currentNums.repeats.push(true);
+      currentNums[nums[i + k]]++;
+    } else {
+      currentNums[nums[i + k]] = 1;
+    }
+    currentNums.currentValue += nums[i + k] - nums[i];
+    if (currentNums.repeats.length == 0 && currentNums.currentValue > max) {
+      max = currentNums.currentValue;
+    }
+  }
+  return max;
+};
+
+// https://leetcode.com/problems/max-consecutive-ones-iii/
+var longestOnes = function (nums, k) {
+  let copy = nums.join("").split("0");
+  let gaps = [];
+  let zeros = 0;
+  for (let i = 0; i < copy.length; i++) {
+    if (copy[i]) {
+      gaps.push([copy[i].length, zeros]);
+      zeros = 1;
+    } else {
+      zeros++;
+    }
+  }
+  if (!gaps.length) {
+    return k;
+  }
+  let longest = gaps[0][0];
+  for (let i = 0; i < gaps.length; i++) {
+    let current = gaps[i][0];
+    let remainingSteps = k;
+    let reachedEnd = false;
+    for (let j = i + 1; remainingSteps > 0 && j < gaps.length; j++) {
+      if (remainingSteps >= gaps[j][1]) {
+        current += gaps[j][0] + gaps[j][1];
+        remainingSteps -= gaps[j][1];
+      } else {
+        current += remainingSteps;
+        remainingSteps = 0;
+      }
+      if (j == gaps.length - 1 && remainingSteps > 0) {
+        reachedEnd = true;
+      }
+    }
+    current += remainingSteps;
+    if (current > longest) {
+      longest = current;
+    }
+    if (reachedEnd) {
+      break;
+    }
+  }
+  if (longest > nums.length) {
+    return nums.length;
+  }
+  return longest;
+};
+
+// https://leetcode.com/problems/max-consecutive-ones/
+var findMaxConsecutiveOnes = function (nums) {
+  let max = 0;
+  let current = 0;
+  for (let num of nums) {
+    if (num == 1) {
+      current++;
+      if (current > max) {
+        max = current;
+      }
+    } else {
+      current = 0;
+    }
+  }
+  return max;
+};
