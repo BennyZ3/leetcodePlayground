@@ -965,3 +965,48 @@ var findMaxConsecutiveOnes = function (nums) {
   }
   return max;
 };
+
+// https://leetcode.com/problems/consecutive-characters/
+var maxPower = function (s) {
+  let max = 1;
+  let current = 1;
+  for (let i = 1; i < s.length; i++) {
+    if (s[i] == s[i - 1]) {
+      current++;
+      if (current > max) {
+        max = current;
+      }
+    } else {
+      current = 1;
+    }
+  }
+  return max;
+};
+
+// https://leetcode.com/problems/count-number-of-homogenous-substrings/
+var countHomogenous = function (s) {
+  let total = 0;
+  let continuous = 1;
+  for (let i = 1; i < s.length; i++) {
+    if (i == s.length - 1 || s[i] != s[i - 1]) {
+      if (i == s.length - 1 && s[i] == s[i - 1]) {
+        continuous++;
+      } else if (i == s.length - 1 && s[i] != s[i - 1]) {
+        total += 1;
+      }
+      total += cascadingSum(continuous);
+      continuous = 1;
+    } else {
+      continuous++;
+    }
+  }
+  return (total < s.length ? s.length : total) % (Math.pow(10, 9) + 7);
+};
+
+const cascadingSum = (num) => {
+  if (num == 1) {
+    return 1;
+  } else {
+    return num + cascadingSum(num - 1);
+  }
+};
