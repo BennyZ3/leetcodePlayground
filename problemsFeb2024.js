@@ -1003,10 +1003,98 @@ var countHomogenous = function (s) {
   return (total < s.length ? s.length : total) % (Math.pow(10, 9) + 7);
 };
 
+// const cascadingSum = (num) => {
+//   if (num == 1) {
+//     return 1;
+//   } else {
+//     return num + cascadingSum(num - 1);
+//   }
+// };
+
+// https://leetcode.com/problems/number-of-substrings-with-only-1s/
+var numSub = function (s) {
+  let total = 0;
+  s = s.split("0");
+  for (let part of s) {
+    total += cascadingSum(part.length);
+  }
+  return total % (Math.pow(10, 9) + 7);
+};
 const cascadingSum = (num) => {
-  if (num == 1) {
-    return 1;
+  if (num <= 1) {
+    return num;
   } else {
     return num + cascadingSum(num - 1);
   }
+};
+
+// https://leetcode.com/problems/find-the-town-judge/?envType=daily-question&envId=2024-02-22
+var findJudge = function (n, trust) {
+  if (n == 1) {
+    return 1;
+  }
+  let townTrust = {};
+  let townTrusters = {};
+  for (let t of trust) {
+    townTrust[t[1]] = townTrust[t[1]] ? townTrust[t[1]] + 1 : 1;
+    townTrusters[t[0]] = true;
+  }
+  for (let i = 1; i <= n; i++) {
+    if (townTrust[i] && !townTrusters[i] && townTrust[i] >= n - 1) {
+      return i;
+    }
+  }
+  return -1;
+};
+
+// https://leetcode.com/problems/same-tree/
+var isSameTree = function (p, q) {
+  if (!p && !q) {
+    return true;
+  } else if (!p || !q) {
+    return false;
+  }
+  let arrP = binaryTreeTraverser(p, []);
+  let arrQ = binaryTreeTraverser(q, []);
+  if (arrP.length != arrQ.length) {
+    return false;
+  }
+  for (let i = 0; i < arrP.length; i++) {
+    if (arrP[i] != arrQ[i]) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const binaryTreeTraverser = (node, arr) => {
+  arr.push(node.val);
+  if (node.left) {
+    binaryTreeTraverser(node.left, arr);
+  } else {
+    arr.push(null);
+  }
+  if (node.right) {
+    binaryTreeTraverser(node.right, arr);
+  }
+  if (arr[arr.length - 1] == null) {
+    arr.pop();
+  }
+  return arr;
+};
+
+// https://leetcode.com/problems/diameter-of-binary-tree/?envType=daily-question&envId=2024-02-27
+var diameterOfBinaryTree = function (root) {
+  let max = 0;
+  const traverse = (node) => {
+    if (!node) {
+      return 0;
+    }
+    let left = traverse(node.left);
+    let right = traverse(node.right);
+    max = Math.max(max, left + right);
+    return Math.max(left, right) + 1;
+  };
+  traverse(root);
+  return max;
 };
