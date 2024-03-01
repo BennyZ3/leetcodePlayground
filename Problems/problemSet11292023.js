@@ -112,3 +112,25 @@ var simplifyPath = function (path) {
   }
   return "/" + stack.join("/");
 };
+
+// https://leetcode.com/problems/remove-outermost-parentheses/
+var removeOuterParentheses = function (s) {
+  let stack = [];
+  let result = "";
+  for (let i = 0, len = s.length; i < len; i++) {
+    if (s[i] === "(") {
+      stack.push(s[i]);
+      if (stack.length > 1) {
+        result += s[i];
+      }
+    } else {
+      stack.pop();
+      if (stack.length > 0) {
+        result += s[i];
+      }
+    }
+  }
+  return result;
+};
+
+console.log(removeOuterParentheses("(()())(())"));
