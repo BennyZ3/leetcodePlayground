@@ -212,5 +212,48 @@ var maxFrequencyElements = function (nums) {
       max = counts[num];
     }
   }
-  return Object.entries(counts).filter((entry) => entry[1] == max).length * max;
+  return Object.values(counts).filter((entry) => entry == max).length * max;
+};
+
+// https://leetcode.com/problems/longest-substring-without-repeating-characters/
+var lengthOfLongestSubstring = function (s) {
+  if (!s.length) {
+    return 0;
+  }
+  let longest = 1;
+  let left = 0;
+  let right = 0;
+  let letters = {};
+  while (right < s.length) {
+    if (!letters[s[right]]) {
+      letters[s[right]] = 1;
+      if (right - left + 1 > longest) {
+        longest = right - left + 1;
+      }
+    } else {
+      letters[s[right]] = letters[s[right]] + 1;
+      while (letters[s[right]] > 1 && left < right) {
+        letters[s[left]] = letters[s[left]] - 1;
+        left++;
+      }
+    }
+    right++;
+  }
+  return longest;
+};
+
+// https://leetcode.com/problems/minimum-common-value/?envType=daily-question&envId=2024-03-09
+var getCommon = function (nums1, nums2) {
+  let first = 0;
+  let second = 0;
+  while (first < nums1.length && second < nums2.length) {
+    if (nums1[first] == nums2[second]) {
+      return nums1[first];
+    } else if (nums1[first] < nums2[second]) {
+      first++;
+    } else {
+      second++;
+    }
+  }
+  return -1;
 };
