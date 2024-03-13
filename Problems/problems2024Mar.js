@@ -257,3 +257,61 @@ var getCommon = function (nums1, nums2) {
   }
   return -1;
 };
+
+// https://leetcode.com/problems/custom-sort-string/?envType=daily-question&envId=2024-03-11
+var customSortString = function (order, s) {
+  let letterOrder = {};
+  for (let i = 0; i < order.length; i++) {
+    letterOrder[order[i]] = i + 1;
+  }
+  for (let char of s) {
+    if (!letterOrder[char]) {
+      letterOrder[char] = 32;
+    }
+  }
+  s = s.split("");
+  s.sort((a, b) => (letterOrder[a] < letterOrder[b] ? -1 : 1));
+  return s.join("");
+};
+
+// https://leetcode.com/problems/sort-the-students-by-their-kth-score/
+var sortTheStudents = function (score, k) {
+  return score.sort((a, b) => b[k] - a[k]);
+};
+
+// https://leetcode.com/problems/remove-zero-sum-consecutive-nodes-from-linked-list/?envType=daily-question&envId=2024-03-12
+var removeZeroSumSublists = function (head) {
+  let negativeNode = new ListNode(0);
+  negativeNode.next = head;
+  let current = negativeNode;
+  let sum = 0;
+  let sums = {};
+  while (current) {
+    sum += current.val;
+    sums[sum] = current;
+    current = current.next;
+  }
+  sum = 0;
+  current = negativeNode;
+  while (current) {
+    sum += current.val;
+    current.next = sums[sum].next;
+    current = current.next;
+  }
+  return negativeNode.next;
+};
+
+// https://leetcode.com/problems/find-the-pivot-integer/?envType=daily-question&envId=2024-03-13
+var pivotInteger = function (n) {
+  let total = (1 + n) * (n / 2);
+  let reduction = total;
+  let k = n;
+  while (reduction > total / 2) {
+    if (total - reduction == reduction - k) {
+      return k;
+    }
+    reduction -= k;
+    k--;
+  }
+  return -1;
+};
