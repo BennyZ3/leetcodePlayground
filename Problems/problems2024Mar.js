@@ -315,3 +315,8 @@ var pivotInteger = function (n) {
   }
   return -1;
 };
+
+// https://leetcode.com/problems/bulb-switcher/
+var bulbSwitch = function (n) {
+  return Math.floor(Math.pow(n, 0.5));
+};
