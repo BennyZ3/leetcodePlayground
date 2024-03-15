@@ -320,3 +320,37 @@ var pivotInteger = function (n) {
 var bulbSwitch = function (n) {
   return Math.floor(Math.pow(n, 0.5));
 };
+
+// https://leetcode.com/problems/binary-subarrays-with-sum/?envType=daily-question&envId=2024-03-14
+var numSubarraysWithSum = function (nums, goal) {
+  let count = 0;
+  let sum = 0;
+  let sums = { 0: 1 };
+  for (let num of nums) {
+    sum += num;
+    count += sums[sum - goal] || 0;
+    sums[sum] = (sums[sum] || 0) + 1;
+  }
+  return count;
+};
+
+// https://leetcode.com/problems/product-of-array-except-self/?envType=daily-question&envId=2024-03-15
+var productExceptSelf = function (nums) {
+  let result = [];
+  let mults = {};
+  let left = 1;
+  let right = 1;
+  for (let i = 0; i < nums.length; i++) {
+    mults[i] = [1, 1];
+  }
+  for (let i = 0; i < nums.length; i++) {
+    mults[i][0] = left;
+    mults[nums.length - i - 1][1] = right;
+    left *= nums[i];
+    right *= nums[nums.length - i - 1];
+  }
+  for (let i = 0; i < nums.length; i++) {
+    result.push(mults[i][0] * mults[i][1]);
+  }
+  return result;
+};
