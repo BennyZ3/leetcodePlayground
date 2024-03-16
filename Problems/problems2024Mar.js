@@ -354,3 +354,67 @@ var productExceptSelf = function (nums) {
   }
   return result;
 };
+
+// https://leetcode.com/problems/maximum-gap/
+var maximumGap = function (nums) {
+  let set = [...new Set(nums)].sort((a, b) => a - b);
+  let result = 0;
+  for (let i = nums.length - 1; i > 0; i--) {
+    let diff = set[i] - set[i - 1];
+    if (diff > result) {
+      result = diff;
+    }
+  }
+  return result;
+};
+
+// https://leetcode.com/problems/longest-palindromic-substring/
+var longestPalindrome = function (s) {
+  let longest = s[0];
+  let len = 0;
+  for (let i = 0; i < s.length - 1; i++) {
+    if (s.length - i < len) {
+      break;
+    }
+    for (let j = s.length - 1; j > i; j--) {
+      if (j - i < len) {
+        break;
+      }
+      if (s[i] == s[j]) {
+        let base = s.substring(i, j + 1);
+        if (isPalindrome(base)) {
+          longest = base;
+          len = base.length;
+        }
+      }
+    }
+  }
+  return longest;
+};
+
+function isPalindrome(s, start = 0, end = s.length - 1) {
+  while (start < end) {
+    if (s[start++] !== s[end--]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// https://leetcode.com/problems/contiguous-array/submissions/1205602609/?envType=daily-question&envId=2024-03-16
+var findMaxLength = function (nums) {
+  let counts = new Map();
+  counts.set(0, -1);
+  let max = 0;
+  let diff = 0;
+  for (let i = 0; i < nums.length; i++) {
+    diff += nums[i] == 1 ? 1 : -1;
+    if (counts.has(diff)) {
+      max = Math.max(max, i - counts.get(diff));
+    } else {
+      counts.set(diff, i);
+    }
+  }
+
+  return max;
+};
