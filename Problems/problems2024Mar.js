@@ -418,3 +418,107 @@ var findMaxLength = function (nums) {
 
   return max;
 };
+
+// overly complex first attempt adjusting based on new test cases
+var insert = function (intervals, newInterval) {
+  if (intervals.length == 0) {
+    return [newInterval];
+  }
+  if (newInterval[1] <= intervals[0][0]) {
+    if (newInterval[1] == intervals[0][0]) {
+      intervals[0][0] = newInterval[0];
+    } else {
+      intervals.unshift(newInterval);
+    }
+    return intervals;
+  }
+  for (let i = 0; i < intervals.length; i++) {
+    if (newInterval[0] < intervals[i][0]) {
+      if (
+        newInterval[1] > intervals[i][0] &&
+        newInterval[1] <= intervals[i][1]
+      ) {
+        intervals[i][0] = newInterval[0];
+      }
+      if (newInterval[1] > intervals[i][1]) {
+        intervals[i][1] = newInterval[1];
+      }
+    }
+    if (
+      newInterval[0] >= intervals[i][0] &&
+      newInterval[0] <= intervals[i][1]
+    ) {
+      if (newInterval[1] >= intervals[i][1]) {
+        intervals[i][1] = newInterval[1];
+      }
+    }
+    if (intervals[i][0] > newInterval[0] && intervals[i][0] <= newInterval[1]) {
+      intervals[i][0] = newInterval[0];
+    }
+    if (
+      intervals[i + 1] &&
+      intervals[i][1] < newInterval[0] &&
+      intervals[i + 1][0] > newInterval[1]
+    ) {
+      intervals.splice(i + 1, 0, newInterval);
+    } else if (!intervals[i + 1] && intervals[i][1] < newInterval[0]) {
+      intervals.splice(i + 1, 0, newInterval);
+    }
+
+    while (intervals[i + 1] && intervals[i][1] >= intervals[i + 1][0]) {
+      if (intervals[i][i] >= intervals[i + 1][1]) {
+        intervals.splice(i + 1, 1);
+      } else {
+        intervals[i][1] = intervals[i + 1][1];
+        intervals.splice(i + 1, 1);
+      }
+    }
+  }
+  return intervals;
+};
+
+// https://leetcode.com/problems/insert-interval/?envType=daily-question&envId=2024-03-17
+var insert = function (intervals, newInterval) {
+  let result = [];
+  let i = 0;
+  while (i < intervals.length && intervals[i][1] < newInterval[0]) {
+    result.push(intervals[i]);
+    i++;
+  }
+  while (i < intervals.length && intervals[i][0] <= newInterval[1]) {
+    newInterval[0] = Math.min(newInterval[0], intervals[i][0]);
+    newInterval[1] = Math.max(newInterval[1], intervals[i][1]);
+    i++;
+  }
+  result.push(newInterval);
+  while (i < intervals.length) {
+    result.push(intervals[i]);
+    i++;
+  }
+  return result;
+};
+
+// https://leetcode.com/problems/minimum-number-of-arrows-to-burst-balloons/?envType=daily-question&envId=2024-03-18
+var findMinArrowShots = function (points) {
+  points.sort((a, b) => {
+    if (a[1] == b[1]) {
+      return a[0] - b[0];
+    } else {
+      return a[1] - b[1];
+    }
+  });
+  let count = 0;
+  let current = -Infinity;
+  for (let i = 0; i < points.length; i++) {
+    if (current >= points[i][0] && current <= points[i][1]) {
+      continue;
+    }
+    if (points[i + 1] && points[i][1] > points[i + 1][1]) {
+      current = points[i + 1][1];
+    } else {
+      current = points[i][1];
+    }
+    count++;
+  }
+  return count;
+};
