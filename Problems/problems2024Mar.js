@@ -522,3 +522,20 @@ var findMinArrowShots = function (points) {
   }
   return count;
 };
+
+// https://leetcode.com/problems/task-scheduler/?envType=daily-question&envId=2024-03-19
+var leastInterval = function (tasks, n) {
+  let highestCount = 0;
+  let taskCount = {};
+  for (let task of tasks) {
+    taskCount[task] = taskCount[task] ? taskCount[task] + 1 : 1;
+    if (taskCount[task] > highestCount) {
+      highestCount = taskCount[task];
+    }
+  }
+  let numHighest = Object.values(taskCount).filter(
+    (a) => a == highestCount
+  ).length;
+  let result = highestCount + (highestCount - 1) * n + numHighest - 1;
+  return result < tasks.length ? tasks.length : result;
+};
