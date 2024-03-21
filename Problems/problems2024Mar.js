@@ -589,3 +589,24 @@ var reverseList = function (head) {
   }
   return newHead;
 };
+
+// Redone with one pass through
+var reverseList = function (head) {
+  if (!head || !head.next) {
+    return head;
+  }
+  let left = head;
+  let center = head.next;
+  let right = center ? center.next : null;
+  left.next = null;
+  while (right) {
+    center.next = left;
+    left = center;
+    center = right;
+    right = right.next;
+  }
+  if (!right) {
+    center.next = left;
+  }
+  return center;
+};
