@@ -539,3 +539,53 @@ var leastInterval = function (tasks, n) {
   let result = highestCount + (highestCount - 1) * n + numHighest - 1;
   return result < tasks.length ? tasks.length : result;
 };
+
+// https://leetcode.com/problems/merge-in-between-linked-lists/?envType=daily-question&envId=2024-03-20
+var mergeInBetween = function (list1, a, b, list2) {
+  let left;
+  let right;
+  let pointer1 = list1;
+  let i = 0;
+  while (!left || !right) {
+    if (i == a - 1) {
+      left = pointer1;
+    }
+    if (i == b) {
+      right = pointer1.next;
+    }
+    pointer1 = pointer1.next;
+    i++;
+  }
+  let pointer2 = list2;
+  let endFlag = true;
+  while (endFlag) {
+    if (!pointer2.next) {
+      endFlag = false;
+      pointer2.next = right;
+    }
+    pointer2 = pointer2.next;
+  }
+  left.next = list2;
+  return list1;
+};
+
+// https://leetcode.com/problems/reverse-linked-list/?envType=daily-question&envId=2024-03-21
+var reverseList = function (head) {
+  if (!head) {
+    return head;
+  }
+  let i = 0;
+  let map = {};
+  let pointer = head;
+  while (pointer) {
+    map[i] = pointer;
+    i++;
+    pointer = pointer.next;
+  }
+  let newHead = map[i - 1];
+  map[0].next = null;
+  for (let j = 1; j < i; j++) {
+    map[j].next = map[j - 1];
+  }
+  return newHead;
+};
