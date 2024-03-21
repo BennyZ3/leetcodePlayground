@@ -568,3 +568,24 @@ var mergeInBetween = function (list1, a, b, list2) {
   left.next = list2;
   return list1;
 };
+
+// https://leetcode.com/problems/reverse-linked-list/?envType=daily-question&envId=2024-03-21
+var reverseList = function (head) {
+  if (!head) {
+    return head;
+  }
+  let i = 0;
+  let map = {};
+  let pointer = head;
+  while (pointer) {
+    map[i] = pointer;
+    i++;
+    pointer = pointer.next;
+  }
+  let newHead = map[i - 1];
+  map[0].next = null;
+  for (let j = 1; j < i; j++) {
+    map[j].next = map[j - 1];
+  }
+  return newHead;
+};
