@@ -610,3 +610,19 @@ var reverseList = function (head) {
   }
   return center;
 };
+
+// https://leetcode.com/problems/palindrome-linked-list/?envType=daily-question&envId=2024-03-22
+var isPalindrome = function (head) {
+  let values = [];
+  let pointer = head;
+  while (pointer) {
+    values.push(pointer.val);
+    pointer = pointer.next;
+  }
+  for (let i = 0; i < values.length / 2; i++) {
+    if (values[i] != values[values.length - i - 1]) {
+      return false;
+    }
+  }
+  return true;
+};
