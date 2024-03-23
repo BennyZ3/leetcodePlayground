@@ -610,3 +610,47 @@ var reverseList = function (head) {
   }
   return center;
 };
+
+// https://leetcode.com/problems/palindrome-linked-list/?envType=daily-question&envId=2024-03-22
+var isPalindrome = function (head) {
+  let values = [];
+  let pointer = head;
+  while (pointer) {
+    values.push(pointer.val);
+    pointer = pointer.next;
+  }
+  for (let i = 0; i < values.length / 2; i++) {
+    if (values[i] != values[values.length - i - 1]) {
+      return false;
+    }
+  }
+  return true;
+};
+
+// https://leetcode.com/problems/reorder-list/?envType=daily-question&envId=2024-03-23
+var reorderList = function (head) {
+  if (!head || !head.next) {
+    return head;
+  }
+  let i = 0;
+  let map = {};
+  let pointer = head;
+  while (pointer) {
+    map[i] = pointer;
+    i++;
+    pointer = pointer.next;
+  }
+  pointer = head;
+  for (let j = 0; j < i; j++) {
+    map[j].next = null;
+  }
+  for (let j = 1; j < i; j++) {
+    if (j % 2) {
+      pointer.next = map[i - Math.floor(j / 2) - 1];
+    } else {
+      pointer.next = map[Math.floor(j / 2)];
+    }
+    pointer = pointer.next;
+  }
+  return head;
+};
