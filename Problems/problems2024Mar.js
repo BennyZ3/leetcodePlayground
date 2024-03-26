@@ -654,3 +654,31 @@ var reorderList = function (head) {
   }
   return head;
 };
+
+// https://leetcode.com/problems/find-all-duplicates-in-an-array/?envType=daily-question&envId=2024-03-25
+var findDuplicates = function (nums) {
+  let numCounts = {};
+  let result = [];
+  for (let num of nums) {
+    if (numCounts[num]) {
+      result.push(num);
+    } else {
+      numCounts[num] = 1;
+    }
+  }
+  return result;
+};
+
+// https://leetcode.com/problems/first-missing-positive/?envType=daily-question&envId=2024-03-26
+var firstMissingPositive = function (nums) {
+  let numSet = new Array(nums.length).fill(false);
+  for (let num of nums) {
+    numSet[num] = true;
+  }
+  for (let i = 1; i < numSet.length; i++) {
+    if (!numSet[i]) {
+      return i;
+    }
+  }
+  return numSet.length;
+};
